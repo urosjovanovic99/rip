@@ -32,3 +32,4 @@ vscode/
 *.sln
 *.user
 *.layout
+.vs/
