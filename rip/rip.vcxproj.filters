@@ -18,5 +18,13 @@
     <ClCompile Include="rip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="openCL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="game_of_life.cl">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
