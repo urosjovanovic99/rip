@@ -58,79 +58,79 @@ __kernel void hello(__global char* out) {
 }
 using namespace many_core;
 
-int main() {
-    std::vector<std::vector<int>> matrix = generate_start_values();
-
-    cl_int err;
-
-    // 1. Get platform & device
-    cl_platform_id platform;
-    cl_device_id device;
-    err = clGetPlatformIDs(1, &platform, nullptr);
-    err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &device, nullptr);
-
-    // 2. Create context & queue
-    cl_context context = clCreateContext(nullptr, 1, &device, nullptr, nullptr, &err);
-    cl_queue_properties props[] = { CL_QUEUE_PROPERTIES, 0, 0 };
-    cl_command_queue queue = clCreateCommandQueueWithProperties(context, device, props, &err);
-
-    // 3. Load & build program
-    std::string kernelSource = loadKernel("game_of_life.cl");
-    const char* src = kernelSource.c_str();
-    size_t length = kernelSource.size();
-    cl_program program = clCreateProgramWithSource(context, 1, &src, &length, &err);
-    err = clBuildProgram(program, 1, &device, nullptr, nullptr, nullptr);
-
-    if (err != CL_SUCCESS) {
-        // Print build log if compilation fails
-        size_t log_size;
-        clGetProgramBuildInfo(program, device, CL_PROGRAM_BUILD_LOG, 0, nullptr, &log_size);
-        std::vector<char> log(log_size);
-        clGetProgramBuildInfo(program, device, CL_PROGRAM_BUILD_LOG, log_size, log.data(), nullptr);
-        std::cerr << "Build log:\n" << log.data() << "\n";
-        return 1;
-    }
-
-    cl_kernel kernel = clCreateKernel(program, "game_of_life", &err);
-
-    // 4. Create buffers
-    cl_mem buf_in = clCreateBuffer(context, CL_MEM_READ_WRITE,
-        sizeof(int) * M * N, nullptr, &err);
-    cl_mem buf_out = clCreateBuffer(context, CL_MEM_READ_WRITE,
-        sizeof(int) * M * N, nullptr, &err);
-
-    // 5. Run multiple steps
-    for (int step = 0; step < NUMBER_OF_ITERATIONS; step++) {
-        // Copy grid to device
-        err = clEnqueueWriteBuffer(queue, buf_in, CL_TRUE, 0,
-            sizeof(int) * matrix.size(), matrix.data(), 0, nullptr, nullptr);
-
-        // Set arguments
-        err = clSetKernelArg(kernel, 0, sizeof(cl_mem), &buf_in);
-        err = clSetKernelArg(kernel, 1, sizeof(cl_mem), &buf_out);
-        err = clSetKernelArg(kernel, 2, sizeof(int), &M);
-        err = clSetKernelArg(kernel, 3, sizeof(int), &N);
-
-        // Run kernel
-        size_t globalSize[2] = { M, N };
-        err = clEnqueueNDRangeKernel(queue, kernel, 2, nullptr, globalSize, nullptr, 0, nullptr, nullptr);
-
-        // Read back
-        err = clEnqueueReadBuffer(queue, buf_out, CL_TRUE, 0,
-            sizeof(int) * matrix.size(), matrix.data(), 0, nullptr, nullptr);
-
-        //std::cout << "Step " << step + 1 << ":\n";
-        show(matrix);
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    }
-
-    // 6. Cleanup
-    clReleaseMemObject(buf_in);
-    clReleaseMemObject(buf_out);
-    clReleaseKernel(kernel);
-    clReleaseProgram(program);
-    clReleaseCommandQueue(queue);
-    clReleaseContext(context);
-
-    return 0;
-}
+//int main() {
+//    std::vector<std::vector<int>> matrix = generate_start_values();
+//
+//    cl_int err;
+//
+//    // 1. Get platform & device
+//    cl_platform_id platform;
+//    cl_device_id device;
+//    err = clGetPlatformIDs(1, &platform, nullptr);
+//    err = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, &device, nullptr);
+//
+//    // 2. Create context & queue
+//    cl_context context = clCreateContext(nullptr, 1, &device, nullptr, nullptr, &err);
+//    cl_queue_properties props[] = { CL_QUEUE_PROPERTIES, 0, 0 };
+//    cl_command_queue queue = clCreateCommandQueueWithProperties(context, device, props, &err);
+//
+//    // 3. Load & build program
+//    std::string kernelSource = loadKernel("game_of_life.cl");
+//    const char* src = kernelSource.c_str();
+//    size_t length = kernelSource.size();
+//    cl_program program = clCreateProgramWithSource(context, 1, &src, &length, &err);
+//    err = clBuildProgram(program, 1, &device, nullptr, nullptr, nullptr);
+//
+//    if (err != CL_SUCCESS) {
+//        // Print build log if compilation fails
+//        size_t log_size;
+//        clGetProgramBuildInfo(program, device, CL_PROGRAM_BUILD_LOG, 0, nullptr, &log_size);
+//        std::vector<char> log(log_size);
+//        clGetProgramBuildInfo(program, device, CL_PROGRAM_BUILD_LOG, log_size, log.data(), nullptr);
+//        std::cerr << "Build log:\n" << log.data() << "\n";
+//        return 1;
+//    }
+//
+//    cl_kernel kernel = clCreateKernel(program, "game_of_life", &err);
+//
+//    // 4. Create buffers
+//    cl_mem buf_in = clCreateBuffer(context, CL_MEM_READ_WRITE,
+//        sizeof(int) * M * N, nullptr, &err);
+//    cl_mem buf_out = clCreateBuffer(context, CL_MEM_READ_WRITE,
+//        sizeof(int) * M * N, nullptr, &err);
+//
+//    // 5. Run multiple steps
+//    for (int step = 0; step < NUMBER_OF_ITERATIONS; step++) {
+//        // Copy grid to device
+//        err = clEnqueueWriteBuffer(queue, buf_in, CL_TRUE, 0,
+//            sizeof(int) * matrix.size(), matrix.data(), 0, nullptr, nullptr);
+//
+//        // Set arguments
+//        err = clSetKernelArg(kernel, 0, sizeof(cl_mem), &buf_in);
+//        err = clSetKernelArg(kernel, 1, sizeof(cl_mem), &buf_out);
+//        err = clSetKernelArg(kernel, 2, sizeof(int), &M);
+//        err = clSetKernelArg(kernel, 3, sizeof(int), &N);
+//
+//        // Run kernel
+//        size_t globalSize[2] = { M, N };
+//        err = clEnqueueNDRangeKernel(queue, kernel, 2, nullptr, globalSize, nullptr, 0, nullptr, nullptr);
+//
+//        // Read back
+//        err = clEnqueueReadBuffer(queue, buf_out, CL_TRUE, 0,
+//            sizeof(int) * matrix.size(), matrix.data(), 0, nullptr, nullptr);
+//
+//        //std::cout << "Step " << step + 1 << ":\n";
+//        show(matrix);
+//        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+//    }
+//
+//    // 6. Cleanup
+//    clReleaseMemObject(buf_in);
+//    clReleaseMemObject(buf_out);
+//    clReleaseKernel(kernel);
+//    clReleaseProgram(program);
+//    clReleaseCommandQueue(queue);
+//    clReleaseContext(context);
+//
+//    return 0;
+//}

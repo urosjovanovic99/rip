@@ -21,10 +21,21 @@
     <ClCompile Include="openCL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="byzantine_problem.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="byzantine_problem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="game_of_life.cl">
       <Filter>Source Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="maxeler.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

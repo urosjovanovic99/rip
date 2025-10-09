@@ -1,3 +1,4 @@
-﻿  openCL.cpp
-  cl_version.h: CL_TARGET_OPENCL_VERSION is not defined. Defaulting to 300 (OpenCL 3.0)
+﻿  byzantine_problem.cpp
   rip.vcxproj -> C:\Users\uros.jovanovic\source\repos\rip\x64\Debug\rip.exe
+  'pwsh.exe' is not recognized as an internal or external command,
+  operable program or batch file.

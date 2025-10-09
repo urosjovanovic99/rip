@@ -1,0 +1,52 @@
+public class GameOfLifeKernel extends Kernel {
+    protected GameOfLifeKernel(KernelParameters parameters, GRID_WIDTH, GRID_HEIGHT) {
+        super(parameters);
+        
+        DFEVar cell = io.input("cell", dfeInt());
+        
+        CounterChain chain = control.count.makeCounterChain();
+        DFEVar x = chain.addCounter(GRID_WIDTH, 1);
+        DFEVar y = chain.addCounter(GRID_HEIGHT, 1);
+        
+        DFEVar topLeft     = stream.offset(cell, -GRID_WIDTH - 1);
+        DFEVar topCenter   = stream.offset(cell, -GRID_WIDTH);
+        DFEVar topRight    = stream.offset(cell, -GRID_WIDTH + 1);
+        DFEVar midLeft     = stream.offset(cell, -1);
+        DFEVar midRight    = stream.offset(cell, 1);
+        DFEVar botLeft     = stream.offset(cell, GRID_WIDTH - 1);
+        DFEVar botCenter   = stream.offset(cell, GRID_WIDTH);
+        DFEVar botRight    = stream.offset(cell, GRID_WIDTH + 1);
+        
+        DFEVar atLeftEdge = x === 0;
+        DFEVar atRightEdge = x === (GRID_WIDTH - 1);
+        DFEVar atTopEdge = y === 0;
+        DFEVar atBottomEdge = y === (GRID_HEIGHT - 1);
+        
+        DFEVar validTopLeft = ~(atTopEdge | atLeftEdge);
+        DFEVar validTopCenter = ~atTopEdge;
+        DFEVar validTopRight = ~(atTopEdge | atRightEdge);
+        DFEVar validMidLeft = ~atLeftEdge;
+        DFEVar validMidRight = ~atRightEdge;
+        DFEVar validBotLeft = ~(atBottomEdge | atLeftEdge);
+        DFEVar validBotCenter = ~atBottomEdge;
+        DFEVar validBotRight = ~(atBottomEdge | atRightEdge);
+        
+        DFEVar neighborCount = 
+            (validTopLeft ? topLeft : 0) +
+            (validTopCenter ? topCenter : 0) +
+            (validTopRight ? topRight : 0) +
+            (validMidLeft ? midLeft : 0) +
+            (validMidRight ? midRight : 0) +
+            (validBotLeft ? botLeft : 0) +
+            (validBotCenter ? botCenter : 0) +
+            (validBotRight ? botRight : 0);
+        
+        DFEVar hasThreeNeighbors = neighborCount === 3;
+        DFEVar hasTwoNeighbors = neighborCount === 2;
+        
+        DFEVar nextState = hasThreeNeighbors === true ? 1 : 
+                           (cell === 1) & hasTwoNeighbors ? 1 : 0;
+        
+        io.output("nextCell", nextState, cellType);
+    }
+}

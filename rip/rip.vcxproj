@@ -127,11 +127,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="byzantine_problem.c" />
+    <ClCompile Include="byzantine_problem.cpp" />
     <ClCompile Include="openCL.cpp" />
     <ClCompile Include="rip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="game_of_life.cl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="maxeler.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
