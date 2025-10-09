@@ -24,7 +24,13 @@
     <ClCompile Include="byzantine_problem.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="byzantine_problem.cpp">
+    <ClCompile Include="byzantine_problem_openmp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="byzantine_problem_opencl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="byzantine_problem_simplefied.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <time.h>
 
-namespace multi_core {
+namespace multi_core_simplefied {
     const int num_lieutenants = 5;
     typedef enum { ATTACK, RETREAT, UNKNOWN } Action;
 
@@ -57,34 +57,4 @@ namespace multi_core {
             return RETREAT;
         }
     }
-}
-using namespace multi_core;
-int main() {
-    srand(static_cast<unsigned int>(time(0)));
-
-    General* commander = new General();
-    commander->id = 0;
-    commander->is_loyal = false;
-    commander->proposed_action = Action::ATTACK;
-
-    General** lieutenants = new General * [num_lieutenants];
-    int m_traitors = 0;
-    for (int i = 0; i < num_lieutenants; i++) {
-        lieutenants[i] = new General();
-        lieutenants[i]->id = i + 1;
-        lieutenants[i]->is_loyal = (rand() % 10) > 3;
-        if (!lieutenants[i]->is_loyal) {
-            m_traitors++;
-        }
-        std::cout << "ID: " << lieutenants[i]->id << std::endl;
-        std::cout << "Is Loyal: " << lieutenants[i]->is_loyal << std::endl;
-    }
-    Action action = om_algorithm(commander, lieutenants, num_lieutenants, m_traitors);
-    std::cout << action << std::endl;
-    for (int i = 0; i < num_lieutenants; i++) {
-        std::cout << "ID: " << lieutenants[i]->id << std::endl;
-        std::cout << "Is Loyal: " << lieutenants[i]->is_loyal << std::endl;
-        std::cout << "Action: " << lieutenants[i]->proposed_action << std::endl;
-    }
-    return 0;
 }

@@ -128,7 +128,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="byzantine_problem.c" />
-    <ClCompile Include="byzantine_problem.cpp" />
+    <ClCompile Include="byzantine_problem_opencl.cpp" />
+    <ClCompile Include="byzantine_problem_openmp.cpp" />
+    <ClCompile Include="byzantine_problem_simplefied.cpp" />
     <ClCompile Include="openCL.cpp" />
     <ClCompile Include="rip.cpp" />
   </ItemGroup>
