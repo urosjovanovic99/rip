@@ -18,29 +18,36 @@
     <ClCompile Include="rip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="openCL.cpp">
+    <ClCompile Include="warshall_multicore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="byzantine_problem.c">
+    <ClCompile Include="warshall_manycore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="byzantine_problem_openmp.cpp">
+    <ClCompile Include="warshall_simplified_maxeler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="byzantine_problem_opencl.cpp">
+    <ClCompile Include="warshal_maxeler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="byzantine_problem_simplefied.cpp">
+    <ClCompile Include="warshall_maxeler2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="game_of_life.cl">
+    <ClCompile Include="warshall_multicore_distributed_memory.cpp">
       <Filter>Source Files</Filter>
-    </None>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="maxeler.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="warshall_maxeler.txt">
+      <Filter>Header Files</Filter>
+    </Text>
+    <Text Include="warshal_maxeler_manager.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="warshall_maxeler_kernel.txt">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>

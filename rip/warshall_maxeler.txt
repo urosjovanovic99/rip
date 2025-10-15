@@ -1,0 +1,30 @@
+public class WarshallKernel extends Kernel {
+    
+    private static final DFEType BOOL_TYPE = dfeBool();
+    
+    public WarshallKernel(KernelParameters parameters, int matrixSize) {
+        super(parameters);
+        
+        Counter kCounter = control.count.makeCounter(
+            control.count.makeParams(32)
+                .withMax(matrixSize)
+        );
+        DFEVar k = kCounter.getCount();
+        
+        Counter elemCounter = control.count.makeCounter(
+            control.count.makeParams(32)
+                .withMax(matrixSize * matrixSize)
+                .withEnable(kCounter.getWrap())
+        );
+        
+        DFEVar currentClosure = io.input("closure_in", BOOL_TYPE);
+        
+        DFEVar rowElem = io.input("row_elem", BOOL_TYPE);
+        
+        DFEVar colElem = io.input("col_elem", BOOL_TYPE);
+        
+        DFEVar newClosure = currentClosure | (rowElem & colElem);
+        
+        io.output("closure_out", newClosure, BOOL_TYPE);
+    }
+}

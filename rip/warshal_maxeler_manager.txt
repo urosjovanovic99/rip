@@ -1,0 +1,20 @@
+public class WarshallManager {
+    
+    public static void main(String[] args) {
+        int matrixSize = 8;
+        
+        ManagerParams params = new ManagerParams(args);
+        Manager manager = new Manager(params);
+        
+        WarshallKernel kernel = new WarshallKernel(
+            manager.makeKernelParameters("WarshallKernel"),
+            matrixSize
+        );
+        
+        manager.setKernel(kernel);
+        
+        manager.setIO(IOType.ALL_CPU);
+        
+        manager.build();
+    }
+}

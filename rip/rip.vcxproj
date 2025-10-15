@@ -127,18 +127,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="byzantine_problem.c" />
-    <ClCompile Include="byzantine_problem_opencl.cpp" />
-    <ClCompile Include="byzantine_problem_openmp.cpp" />
-    <ClCompile Include="byzantine_problem_simplefied.cpp" />
-    <ClCompile Include="openCL.cpp" />
     <ClCompile Include="rip.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="game_of_life.cl" />
+    <ClCompile Include="warshall_manycore.cpp" />
+    <ClCompile Include="warshall_maxeler2.cpp" />
+    <ClCompile Include="warshall_multicore_distributed_memory.cpp" />
+    <ClCompile Include="warshall_simplified_maxeler.cpp" />
+    <ClCompile Include="warshall_multicore.cpp" />
+    <ClCompile Include="warshal_maxeler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="maxeler.txt" />
+    <Text Include="warshall_maxeler.txt" />
+    <Text Include="warshall_maxeler_kernel.txt" />
+    <Text Include="warshal_maxeler_manager.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

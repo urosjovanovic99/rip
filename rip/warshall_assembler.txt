@@ -1,0 +1,80 @@
+movi r7, 7              ; N = 7
+la r8, A                ; base address of matrix A
+movi r3, 0              ; k = 0
+
+loop_k:
+  seq r14, r3, r7       ; if (k == N) break
+  bt end_k, r14 
+
+  movi r1, 0            ; i = 0
+loop_i:
+  seq r14, r1, r7       ; if (i == N) break
+  bt next_k, r14 
+
+  movi r2, 0            ; j = 0
+loop_j:
+  seq r14, r2, r7       ; if (j == N) break
+  bt next_i, r14 
+
+  movr r9, r8           ; r9 = base Compute addr(i,j): base + ((i*N)+j)*4
+  movi r10, 0           ; r10 = 0
+  movr r13, r1          ; counter = i
+mul_iN:
+  seq r14, r13, 0 
+  bt done_iN, r14 
+  addri r10, r10, 7     ; r10 += N
+  subri r13, r13, 1 
+  ba mul_iN 
+done_iN:
+  addrr r10, r10, r2    ; r10 = i*N + j
+  sla r10, r10, 2       ; *4 (word size)
+  addrr r10, r9, r10    ; r10 = base + offset
+ 
+  movr r11, r8          ; Compute addr(i,k): base + ((i*N)+k)*4
+  movr r13, r1 
+  movr r9, r0 
+mul_iN2:
+  seq r14, r13, r0 
+  bt done_iN2, r14 
+  addri r9, r9, 7 
+  subri r13, r13, 1 
+  ba mul_iN2 
+done_iN2:
+  addrr r9, r9, r3      ; i*N + k
+  sla r9, r9, 2         ; *4 (word size)
+  addrr r11, r11, r9    ; r11 = addr(i,k)
+
+  movr r12, r8          ; Compute addr(k,j): base + ((k*N)+j)*4
+  movr r13, r3 
+  movr r9, r0 
+mul_kN:
+  seq r14, r13, r0 
+  bt done_kN, r14 
+  addri r9, r9, 7 
+  subri r13, r13, 1 
+  ba mul_kN 
+done_kN:
+  addrr r9, r9, r2      ; k*N + j
+  sla r9, r9, 2 	; *4 (word size)
+  addrr r12, r12, r9    ; r12 = addr(k,j)
+
+  ld r4, r10            ; A[i][j]
+  ld r5, r11            ; A[i][k]
+  ld r6, r12            ; A[k][j]
+  andrr r13, r5, r6     ; A[i][j] = A[i][j] OR (A[i][k] AND A[k][j])
+  orrr r4, r4, r13 
+  st r4, r10 
+
+  addri r2, r2, 1       ; j++
+  ba loop_j 
+
+next_i:
+  addri r1, r1, 1       ; i++
+  ba loop_i 
+
+next_k:
+  addri r3, r3, 1       ; k++
+  ba loop_k 
+
+end_k:
+  noophalt

@@ -1,0 +1,54 @@
+public class WarshallKernel extends Kernel {
+    
+    private static final DFEType BOOL_TYPE = dfeBool();
+    private static final DFEType INDEX_TYPE = dfeUInt(32);
+    
+    public WarshallKernel(KernelParameters parameters, int matrixSize) {
+        super(parameters);
+        
+        int sizeBits = matrixSize;
+        int totalElemBits = matrixSize * matrixSize;
+        
+        CounterChain chain = control.count.makeCounterChain();
+        DFEVar k = chain.addCounter(matrixSize, 1).cast(INDEX_TYPE);
+        
+        DFEVar elemIndex = chain.addCounter(matrixSize * matrixSize, 1)
+                                .cast(INDEX_TYPE);
+        
+        DFEVar i = elemIndex / matrixSize;
+        DFEVar j = elemIndex % matrixSize;
+        
+        Memory<DFEVar> closureMemory = mem.alloc(
+            BOOL_TYPE, 
+            matrixSize * matrixSize
+        );
+        
+        DFEVar currentAddr = i * matrixSize + j;
+        
+        DFEVar currentClosure = closureMemory.read(currentAddr);
+        
+        DFEVar closureInput = io.input("closure_in", BOOL_TYPE);
+        
+        DFEVar isFirstIteration = (k === 0) & (elemIndex === 0);
+        
+        DFEVar closureValue = isFirstIteration ? closureInput : currentClosure;
+        
+        DFEVar addrIK = i * matrixSize + k;
+        DFEVar addrKJ = k * matrixSize + j;
+        
+        DFEVar closureIK = closureMemory.read(addrIK);
+        DFEVar closureKJ = closureMemory.read(addrKJ);
+        
+        DFEVar pathThroughK = closureIK & closureKJ;
+        DFEVar newClosure = closureValue | pathThroughK;
+        
+        closureMemory.write(
+            currentAddr,
+            newClosure
+        );
+        
+        DFEVar isLastIteration = (k === (matrixSize - 1));
+        
+        io.output("closure_out", newClosure, BOOL_TYPE, isLastIteration);
+    }
+}
